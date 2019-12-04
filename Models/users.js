@@ -9,11 +9,11 @@ const userSchema = new mongoose.Schema({
     password: {
         required: true,
         type: String
-    }//,
-    // groups: [{
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Group'
-    // }]
+    },
+    myIngredients: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'MyIngredient'
+    }]
 });
 
 module.exports = mongoose.model('User', userSchema);

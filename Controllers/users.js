@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const User = require("../Models/users");
+const User = require("../models/users");
 const bcrypt = require("bcryptjs");
 
 //Registration post
@@ -17,7 +17,7 @@ router.post('/registration', async (req, res) => {
         console.log(`Created User ==>`, createdUser)
         req.session.username = createdUser.username;
         req.session.logged = true;
-        res.redirect('/')
+        res.send("User Registered")
     } catch (err) {
         console.log(err)
         res.send("Please go back and fill in all required fields.");
@@ -33,7 +33,7 @@ router.post('/login', async (req, res) => {
                 req.session.message = '';
                 req.session.username = foundUser.username;
                 req.session.logged = true;
-                res.redirect('/')
+                res.send('Logged in')
             } else {
                 req.session.message = 'Username/password incorrect';
                 res.redirect('/');
@@ -53,7 +53,7 @@ router.get('/logout', (req, res) => {
         if (err) {
             res.send(err);
         } else {
-            res.redirect('/');
+            res.send('Logged Out');
         }
     })
 })

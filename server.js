@@ -17,13 +17,13 @@ app.use(session({
 //middleware
 app.use(express.static('public'));
 app.use(methodOverride('_method'));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({ extended: true }));
 
 //controllers check
 const usersController = require('./controllers/users.js');
 app.use('/auth', usersController);
 
-const myIngredientsController = require('./Controllers/myIngredients.js');
+const myIngredientsController = require('./controllers/myIngredients.js');
 app.use('/myIngredients', myIngredientsController);
 
 

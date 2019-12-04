@@ -1,26 +1,28 @@
 const express = require('express');
 const router = express.Router();
-const MyIngredients = require("../Models/myIngredients");
+const MyIngredients = require("../models/myIngredients");
+const User = require("../models/users");
+
 
 //ROUTES
 
 //index route  need to make sure it finds only the CURRENT users groups
 router.get('/', async (req, res) => {
-    // try {
-    //     const foundUser = await User.findOne({ 'username': req.session.username })
-    //         .populate(
-    //             {
-    //                 path: 'groups',
-    //                 match: { _id: req.params.id }
-    //             })
-    //         .exec()
-    //     // console.log(`FOUND USER`, foundUser)
-
-    try{
-        const foundMyIngredients = await MyIngredients.find({}); //not needed?
-        res.send(foundMyIngredients)
+    console.log('hello')
+    try {
+        const foundUser = await User.findOne({ 'username': req.session.username })
+            .populate(
+                {
+                    path: 'myIngredients',
+                    match: { _id: req.params.id }
+                })
+            .exec()
+                console.log("FOUNDUSER", foundUser)
+        // const foundMyIngredients = await MyIngredients.find({});
+        res.statusCode = 201
+        res.send(foundUser)
     //     res.render('groups/index.ejs', {
-    //         groups: foundUser.groups,
+    //         myIngredients: foundUser.myIngredients,
     //         username: req.session.username,
     //         message: req.session.message,
     //         logged: req.session.logged
@@ -39,17 +41,14 @@ router.get('/', async (req, res) => {
 
 //create route DONE and pushes group into current users groups array
 router.post('/', async (req, res) => {
-    // console.log(req.body)
+    console.log('IN POST TO MYINGREDIENTS')
+    console.log('REQBODY:', req.body)
     try{
-        const createIngredient = await MyIngredients.create({name: req.body.name})
+        const findUser = await User.findOne({ 'username': req.session.username });
+        const createIngredient = await MyIngredients.create(req.body)
+        findUser.myIngredients.push(createIngredient);
+        await findUser.save();
         res.send(createIngredient);
-    // try {
-    //     const findUser = await User.findOne({ 'username': req.session.username });
-    //     const createGroup = await Group.create(req.body);
-    //     findUser.groups.push(createGroup);
-    //     await findUser.save();
-    //     console.log(`FINDUSER CHECK FOR GROUPS ARRAY`, findUser)
-    //     res.redirect('/groups');
     } catch (err) {
         console.log(err)
         res.send("Please go back and fill in all required fields.");
