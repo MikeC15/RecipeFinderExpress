@@ -10,6 +10,9 @@ const User = require("../models/users");
 router.get('/', async (req, res) => {
     console.log('hello')
     try {
+        console.log('Session:', req.session)
+        console.log('Username:', req.session.username)
+
         const foundUser = await User.findOne({ 'username': req.session.username })
             .populate(
                 {
@@ -19,8 +22,10 @@ router.get('/', async (req, res) => {
             .exec()
                 console.log("FOUNDUSER", foundUser)
         // const foundMyIngredients = await MyIngredients.find({});
-        res.statusCode = 201
-        res.send(foundUser)
+        if(foundUser){
+            res.statusCode = 201
+            res.json({user: foundUser})
+        }else{res.send({status: 404})}
     //     res.render('groups/index.ejs', {
     //         myIngredients: foundUser.myIngredients,
     //         username: req.session.username,

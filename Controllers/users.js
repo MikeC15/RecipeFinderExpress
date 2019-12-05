@@ -17,7 +17,8 @@ router.post('/registration', async (req, res) => {
         console.log(`Created User ==>`, createdUser)
         req.session.username = createdUser.username;
         req.session.logged = true;
-        res.send("User Registered")
+        
+        res.send({message: "User Registered", status: 201})
     } catch (err) {
         console.log(err)
         res.send("Please go back and fill in all required fields.");
@@ -28,12 +29,15 @@ router.post('/registration', async (req, res) => {
 router.post('/login', async (req, res) => {
     try {
         const foundUser = await User.findOne({ username: req.body.username });
+        
         if (foundUser) {
             if (bcrypt.compareSync(req.body.password, foundUser.password)) {
                 req.session.message = '';
                 req.session.username = foundUser.username;
                 req.session.logged = true;
-                res.send('Logged in')
+                console.log('Session:', req.session)
+                console.log('Username:', req.session.username)
+                res.send({ message: "User LoggedIn", status: 200, username:foundUser })
             } else {
                 req.session.message = 'Username/password incorrect';
                 res.redirect('/');
