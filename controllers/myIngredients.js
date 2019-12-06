@@ -141,7 +141,7 @@ router.delete('/:id', async (req, res) => {
         findUser.myIngredients.remove(req.params.id);
         await findUser.save()
         console.log(findUser)
-        res.send("deleted")
+        res.json({user: findUser})
     } catch (err) {
         res.send(err);
     }
