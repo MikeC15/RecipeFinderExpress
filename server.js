@@ -5,15 +5,19 @@ const cors = require('cors')
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 
 //database check
 require('./db/db');
 
 app.use(session({
     key: 'session.sid',
-    secret: "this is a random secret string",
+    secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: false,
+    store: new MongoStore({
+        mongooseConnection: mongoose.connection
+    }),
     cookie: { 
         secure: false,
         maxAge: 1800000
