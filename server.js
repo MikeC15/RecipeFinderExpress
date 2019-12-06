@@ -31,20 +31,24 @@ app.use(methodOverride('_method'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-
-
-var whitelist = ['http://localhost:3000', "https://mikesrecipefinder.herokuapp.com", "https://mikesrecipefinderexpress.herokuapp.com"]
-var corsOptions = {
+const clientDevPort = 3000;
+app.use(cors({
     credentials: true,
-    origin: function (origin, callback) {
-        if (whitelist.indexOf(origin) !== -1) {
-            callback(null, true)
-        } else {
-            callback(new Error('Not allowed by CORS'))
-        }
-    }
-}
-app.use(cors(corsOptions))
+    origin: process.env.CLIENT_ORIGIN || `http://localhost:${clientDevPort}`
+}));
+
+// var whitelist = ['http://localhost:3000', "https://mikesrecipefinder.herokuapp.com", "https://mikesrecipefinderexpress.herokuapp.com"]
+// var corsOptions = {
+//     credentials: true,
+//     origin: function (origin, callback) {
+//         if (whitelist.indexOf(origin) !== -1) {
+//             callback(null, true)
+//         } else {
+//             callback(new Error('Not allowed by CORS'))
+//         }
+//     }
+// }
+// app.use(cors(corsOptions))
 
 //controllers check
 const usersController = require('./controllers/users.js');
