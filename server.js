@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 
 
-var whitelist = ['http://localhost:3000']
+var whitelist = ['http://localhost:3000', "http://mikesrecipefinder.herokuapp.com", "http://mikesrecipefinderexpress.herokuapp.com"]
 var corsOptions = {
     credentials: true,
     origin: function (origin, callback) {
