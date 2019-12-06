@@ -10,8 +10,8 @@ const User = require("../models/users");
 router.get('/', async (req, res) => {
     console.log('hello')
     try {
-        console.log('Session:', req.session)
-        console.log('Username:', req.session.username)
+        // console.log('Session:::', req.session)
+        // console.log('Username:::', req.session.username)
 
         const foundUser = await User.findOne({ 'username': req.session.username })
             .populate(
@@ -59,7 +59,7 @@ router.post('/', async (req, res) => {
         const createIngredient = await MyIngredients.create(req.body)
         findUser.myIngredients.push(createIngredient);
         await findUser.save();
-        res.send(findUser);
+        res.json({ user: findUser })
     } catch (err) {
         console.log(err)
         res.send("Please go back and fill in all required fields.");
@@ -86,7 +86,8 @@ router.get('/:id', async (req, res) => {
         //     group: foundUser.groups[0],
         // });
         // console.log(foundUser)
-        res.send(req.session.myIngredients)
+        // res.send(req.session.myIngredients)
+        res.json({ myIngredients: req.session.myIngredients })
     } catch (err) {
         res.send(err);
     }
@@ -122,7 +123,8 @@ router.put('/:id', async (req, res) => {
                     match: { _id: req.params.id }
                 })
             .exec()
-        res.send(foundUser);
+        res.json({ user: foundUser })
+        
     } catch (err) {
         console.log(err)
         res.send("Please go back and fill in all required fields.");

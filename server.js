@@ -10,15 +10,22 @@ const session = require('express-session');
 require('./db/db');
 
 app.use(session({
+    key: 'session.sid',
     secret: "this is a random secret string",
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: { 
+        secure: false,
+        maxAge: 1800000
+     }
 }));
 
 //middleware
 app.use(express.static('public'));
 app.use(methodOverride('_method'));
-app.use(bodyParser.json({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
 
 
 var whitelist = ['http://localhost:3000']
